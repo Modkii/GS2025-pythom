@@ -1,0 +1,133 @@
+from chamados import GerenciadorChamados
+from alocacao import knapsack
+from grafo import grafo, dijkstra
+from grafo import grafo, dijkstra, mostrar_rota
+
+
+def main():
+
+    chamados = GerenciadorChamados()
+
+    contador_id = max([c['id'] for c in chamados.listar()], default=0) + 1
+
+    while True:
+
+        print("\n=== Sistema de Controle de Incêndios ===")
+        print("1. Inserir chamado")
+        print("2. Atender próximo chamado")
+        print("3. Listar fila de chamados")
+        print("4. Calcular melhor alocação (Knapsack)")
+        print("5. Calcular rota entre pontos (Dijkstra)")
+        print("6. Deletar chamado por ID")
+        print("7. Sair")
+
+        opcao = input("\nEscolha uma opção: ")
+
+        if opcao == '1':
+
+            regiao = input("Região: ")
+
+            distancia = int(input("Distancia: "))
+
+            gravidade = int(input("Gravidade (1-10): "))
+
+            chamado = {
+                'id': contador_id,
+                'regiao': regiao,
+                'distancia' : distancia,
+                'gravidade': gravidade
+            }
+
+            contador_id += 1
+
+            chamados.adicionar(chamado)
+
+            print("\nChamado inserido com sucesso!")
+
+            input("\nAperte ENTER para voltar ao menu...")
+
+        elif opcao == '2':
+
+            chamado = chamados.proximo()
+
+            if chamado:
+                print(f"\nAtendendo chamado: {chamado}")
+            else:
+                print("\nNenhum chamado na fila.")
+
+            input("\nAperte ENTER para voltar ao menu...")
+
+        elif opcao == '3':
+
+            fila = chamados.listar()
+
+            if fila:
+                print("\n=== Fila de Chamados ===")
+                for c in fila:
+                    print(c)
+            else:
+                print("\nFila vazia.")
+
+            input("\nAperte ENTER para voltar ao menu...")
+
+        elif opcao == '4':
+
+            focos = chamados.listar()
+
+            if not focos:
+                print("\nSem chamados na fila.")
+
+            else:
+                n_cam = int(input("Quantos caminhões disponíveis? "))
+
+                resultado = knapsack(focos, n_cam)
+
+                print(f"\nMelhor gravidade total atendida: {resultado}")
+
+            input("\nAperte ENTER para voltar ao menu...")
+
+        elif opcao == '5':
+
+            origem = input("Origem: ")
+
+            destino = input("Destino: ")
+
+            custo, caminho = dijkstra(grafo, origem, destino)
+
+            if caminho:
+                custo, caminho = dijkstra(grafo, origem, destino)
+            else:
+                print('\nRota impossível.')
+
+            input("\nAperte ENTER para voltar ao menu...")
+
+        elif opcao == '6':
+
+            try:
+                id_deletar = int(input("Digite o ID do chamado para deletar: "))
+
+                sucesso = chamados.deletar(id_deletar)
+
+                if sucesso:
+                    print("\nChamado deletado com sucesso.")
+                else:
+                    print("\nChamado não encontrado.")
+
+            except ValueError:
+                print("\nID inválido.")
+
+            input("\nAperte ENTER para voltar ao menu...")
+
+        elif opcao == '7':
+
+            print("\nEncerrando sistema...")
+            break
+
+        else:
+            print("\nOpção inválida. Tente novamente.")
+
+            input("\nAperte ENTER para voltar ao menu...")
+
+
+if __name__ == "__main__":
+    main()
