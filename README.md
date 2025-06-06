@@ -40,3 +40,9 @@ Acesse a pasta do projeto:
 cd Gerenciador-de-incendios-pythom-GS2025
 
 Execute a aplicação:
+
+
+integrantes:
+Gabriel Matias Simões  RM: 556171
+Nathan Craveiro        RM:555508
+Miguel Carmo           RM557622
